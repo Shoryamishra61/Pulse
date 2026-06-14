@@ -130,7 +130,7 @@ export function generateCustomers(count: number = 300): SyntheticCustomer[] {
       case 'high_value':
         orderCount = randomBetween(8, 20);
         totalSpend = randomBetween(10000, 50000);
-        daysSinceLastOrder = randomBetween(5, 30);
+        daysSinceLastOrder = randomBetween(5, 90); // Changed to 90 so demo queries for 'inactive 30 days' return results
         break;
       case 'regular':
         orderCount = randomBetween(3, 10);
