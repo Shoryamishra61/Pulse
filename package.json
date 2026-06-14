@@ -1,0 +1,38 @@
+{
+  "name": "pulse",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "test": "tsx src/__tests__/state-machine.test.ts && tsx src/__tests__/api-contract.test.ts && tsx src/__tests__/webhook-lifecycle.test.ts",
+    "seed": "tsx src/lib/services/seed-data.ts",
+    "channel-service": "cd apps/channel-service && npm run dev",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.44.0",
+    "framer-motion": "^12.40.0",
+    "next": "16.2.9",
+    "pg": "^8.16.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "uuid": "^14.0.0",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/pg": "^8.11.6",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/uuid": "^10.0.0",
+    "drizzle-kit": "^0.31.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.9",
+    "tsx": "^4.19.0",
+    "typescript": "^5"
+  }
+}
