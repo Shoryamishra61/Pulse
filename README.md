@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="YOUR_VERCEL_URL_HERE">Live Demo</a> · 
+  <a href="https://pulse-shoryamishra61s-projects.vercel.app/">Live Demo</a> · 
   <a href="YOUR_VIDEO_URL_HERE">Video Walkthrough</a> · 
   <a href="https://github.com/Shoryamishra61/Pulse">GitHub</a> · 
   <a href="#architecture">Architecture</a> · 
