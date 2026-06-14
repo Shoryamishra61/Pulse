@@ -377,6 +377,14 @@ export function intentToPredicateTree(message: string): { predicate: PredicateNo
     descriptions.push(`spent > ₹${val.toLocaleString()}`);
   }
 
+  // Hallucinated "high [field]" for self-correction demo
+  const highFieldMatch = lower.match(/high\s+(purchase_value|total_purchase)/);
+  if (highFieldMatch) {
+    const fieldName = highFieldMatch[1];
+    conditions.push({ type: 'field', field: fieldName, op: '>', value: 5000 });
+    descriptions.push(`high ${fieldName}`);
+  }
+
   // Order count
   const orderMatch = lower.match(/(?:ordered|orders|purchased|bought)\s*(?:more than|over|above|>)\s*(\d+)/);
   if (orderMatch) {
@@ -410,25 +418,23 @@ export function intentToPredicateTree(message: string): { predicate: PredicateNo
   }
 
   // Behavioral segments
-  if (conditions.length === 0) {
-    if (lower.includes('high value') || lower.includes('vip') || lower.includes('best')) {
-      conditions.push({ type: 'field', field: 'segment', op: 'IN', value: ['champion', 'high_value'] });
-      descriptions.push('high-value customers');
-    } else if (lower.includes('at risk') || lower.includes('churn') || lower.includes('leaving')) {
-      conditions.push({ type: 'field', field: 'segment', op: '=', value: 'at_risk' });
-      descriptions.push('at-risk customers');
-    } else if (lower.includes('new') || lower.includes('recent')) {
-      conditions.push({ type: 'field', field: 'segment', op: '=', value: 'new' });
-      descriptions.push('new customers');
-    } else if (lower.includes('dormant') || lower.includes('inactive') || lower.includes('sleeping')) {
-      conditions.push({ type: 'field', field: 'segment', op: '=', value: 'dormant' });
-      descriptions.push('dormant customers');
-    } else if (lower.includes('cart') || lower.includes('abandon')) {
-      conditions.push({ type: 'field', field: 'cart_abandoned', op: '=', value: true });
-      descriptions.push('abandoned cart');
-    } else {
-      descriptions.push('all customers');
-    }
+  if (lower.includes('high value') || lower.includes('vip') || lower.includes('best')) {
+    conditions.push({ type: 'field', field: 'segment', op: 'IN', value: ['champion', 'high_value'] });
+    descriptions.push('high-value customers');
+  } else if (lower.includes('at risk') || lower.includes('churn') || lower.includes('leaving')) {
+    conditions.push({ type: 'field', field: 'segment', op: '=', value: 'at_risk' });
+    descriptions.push('at-risk customers');
+  } else if (lower.includes('new') || lower.includes('recent')) {
+    conditions.push({ type: 'field', field: 'segment', op: '=', value: 'new' });
+    descriptions.push('new customers');
+  } else if (lower.includes('dormant') || lower.includes('inactive') || lower.includes('sleeping')) {
+    conditions.push({ type: 'field', field: 'segment', op: '=', value: 'dormant' });
+    descriptions.push('dormant customers');
+  } else if (lower.includes('cart') || lower.includes('abandon')) {
+    conditions.push({ type: 'field', field: 'cart_abandoned', op: '=', value: true });
+    descriptions.push('abandoned cart');
+  } else if (conditions.length === 0) {
+    descriptions.push('all customers');
   }
 
   const predicate: PredicateNode = conditions.length > 1
