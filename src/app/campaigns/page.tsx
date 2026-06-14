@@ -70,9 +70,33 @@ export default function CampaignsPage() {
     try {
       const res = await fetch(`/api/campaigns?campaignId=${id}`);
       const data = await res.json();
-      setSelectedCampaignDetails(data);
+      
+      if (!res.ok || data.error) {
+        // Fallback to Zustand state if we are querying the active campaign in a Serverless environment
+        const state = usePulseStore.getState();
+        const localActive = state.activeCampaign;
+        if (localActive && localActive.id === id) {
+          setSelectedCampaignDetails({
+            id: localActive.id,
+            name: localActive.name,
+            segmentName: 'Selected Segment',
+            channel: localActive.channel || 'email',
+            status: localActive.status || 'active',
+            recipientCount: localActive.recipientCount,
+            messageContent: { body: 'Content loaded from active session.' },
+            createdAt: new Date().toISOString(),
+            stats: localActive.stats,
+          });
+        } else {
+          console.warn('Campaign details fetch failed:', data.error);
+          setSelectedCampaignDetails(null);
+        }
+      } else {
+        setSelectedCampaignDetails(data);
+      }
     } catch (err) {
-      console.error(err);
+      console.error('Network error fetching campaign:', err);
+      setSelectedCampaignDetails(null);
     } finally {
       setDetailsLoading(false);
     }
