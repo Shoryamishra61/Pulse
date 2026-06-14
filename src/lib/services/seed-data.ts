@@ -193,6 +193,34 @@ export function generateCustomers(count: number = 300): SyntheticCustomer[] {
     });
   }
 
+  // --- Guarantee Base Cohort Distributions ---
+  // 1. Inactive regional VIPs
+  for (let i = 0; i < 8; i++) {
+    customers[i].properties.city = 'Mumbai';
+    customers[i].properties.segment = 'high_value';
+    customers[i].properties.loyaltyTier = 'platinum';
+    const lastOrderDate = new Date();
+    lastOrderDate.setDate(lastOrderDate.getDate() - randomBetween(35, 80));
+    customers[i].lastOrderDate = lastOrderDate;
+    customers[i].totalSpend = randomBetween(20000, 80000);
+  }
+
+  // 2. High-LTV metropolitan shoppers
+  for (let i = 8; i < 20; i++) {
+    customers[i].properties.city = 'Delhi';
+    customers[i].totalSpend = randomBetween(40000, 120000);
+  }
+
+  // 3. At-risk moderate spenders
+
+  for (let i = 20; i < 35; i++) {
+    customers[i].properties.segment = 'at_risk';
+    customers[i].totalSpend = randomBetween(4000, 25000);
+    const lastOrderDate = new Date();
+    lastOrderDate.setDate(lastOrderDate.getDate() - randomBetween(45, 120));
+    customers[i].lastOrderDate = lastOrderDate;
+  }
+
   return customers;
 }
 
